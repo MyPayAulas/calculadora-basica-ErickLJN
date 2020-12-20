@@ -1,5 +1,6 @@
 package com.example.mycalculator
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         functionalButtons()
         operationalButtons()
         numericalButtons()
+        extraButtons()
     }
 
     private fun numericalButtons() {
@@ -114,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         leftHandSide = digit_on_screen.toString().toDouble()
         digit_on_screen.clear()
         result_id.text = "$digit_on_screen"
-    }
+        }
 
         class OperationsHelper {
 
@@ -162,6 +164,20 @@ class MainActivity : AppCompatActivity() {
             performMathOperation()
         }
 
+    }
+
+    private fun extraButtons(){
+
+        hist_btn.setOnClickListener(){
+            val intent = Intent(this, ActivityHistory::class.java)
+            intent.putExtra("VarTestString", "my text")
+            intent.putExtra("VarTestInt", 55)
+            intent.putExtra("VarTestFloat", 228.5F)
+
+            val history = CalculationHistory(mutableListOf(Calculation("1 + 1", "2")))
+            intent.putExtra("ObjectTest", history)
+            startActivity(intent)
+        }
     }
 
     private fun performMathOperation() {
