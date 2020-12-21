@@ -3,6 +3,7 @@ package com.example.mycalculator
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycalculator.ui.main.HistoricoCalculos
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.pow
 
@@ -13,12 +14,15 @@ class MainActivity : AppCompatActivity() {
     var leftHandSide: Double = 0.0
     var rightHandSide: Double = 0.0
 
+    private  val historico = HistoricoCalculos(mutableListOf())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         result_id.text = "0"
 
+        addMockData()
         initializeButtons()
     }
 
@@ -156,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             result_id.text = digit_on_screen.toString()
         }
 
-        clear_btn.setOnClickListener {
+        hist_btn.setOnClickListener {
             clearDigit()
         }
 
@@ -166,17 +170,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun extraButtons(){
+    private fun extraButtons() {
 
-        hist_btn.setOnClickListener(){
-            val intent = Intent(this, ActivityHistory::class.java)
-            intent.putExtra("VarTestString", "my text")
-            intent.putExtra("VarTestInt", 55)
-            intent.putExtra("VarTestFloat", 228.5F)
+        hist_btn.setOnClickListener {
+            val intent = Intent(this, HistoricoRecyclerActivity::class.java)
 
-            val history = CalculationHistory(mutableListOf(Calculation("1 + 1", "2")))
-            intent.putExtra("ObjectTest", history)
+            intent.putExtra("historico", historico)
             startActivity(intent)
+        }
+    }
+
+    private fun addMockData(){
+        for(i in 1..50){
+            historico.listaCalculos.add(Calculo("$i  *  ${i - 1}", "${i * (i - 1)}"))
         }
     }
 
