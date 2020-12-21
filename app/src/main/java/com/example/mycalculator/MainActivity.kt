@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     var leftHandSide: Double = 0.0
     var rightHandSide: Double = 0.0
 
+    var acumulateOperation: String = " "
+
     private  val historico = HistoricoCalculos(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         result_id.text = "0"
 
-        addMockData()
         initializeButtons()
     }
 
@@ -148,10 +149,18 @@ class MainActivity : AppCompatActivity() {
 
             fun pow(left_hand_side: Double, right_hand_side: Double): Double {
                 val exponential = left_hand_side.pow(right_hand_side)
+                var acumulateOperation = "${left_hand_side} ^ ${right_hand_side}"
                 return exponential
             }
         }
     }
+
+    private fun acumulaHistorico(){
+
+        historico.listaCalculos.add(Calculo("${acumulateOperation}", "${digit_on_screen}"))
+
+        }
+
 
     private fun functionalButtons() {
 
@@ -166,6 +175,7 @@ class MainActivity : AppCompatActivity() {
 
         equal_btn.setOnClickListener {
             performMathOperation()
+            acumulaHistorico()
         }
 
     }
@@ -180,12 +190,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addMockData(){
-        for(i in 1..50){
-            historico.listaCalculos.add(Calculo("$i  *  ${i - 1}", "${i * (i - 1)}"))
-        }
-    }
-
     private fun performMathOperation() {
 
         rightHandSide = digit_on_screen.toString().toDouble()
@@ -197,26 +201,31 @@ class MainActivity : AppCompatActivity() {
                 val sum = OperationsHelper.add(leftHandSide, rightHandSide)
                 result_id.text = sum.toString()
                 digit_on_screen.append(sum)
+                acumulateOperation = "${leftHandSide}  +  ${rightHandSide}"
             }
             'S' -> {
                 val subtract = OperationsHelper.subtraction(leftHandSide, rightHandSide)
                 result_id.text = subtract.toString()
                 digit_on_screen.append(subtract)
+                acumulateOperation = "${leftHandSide}  -  ${rightHandSide}"
             }
             'M' -> {
                 val multiply = OperationsHelper.multiply(leftHandSide, rightHandSide)
                 result_id.text = multiply.toString()
                 digit_on_screen.append(multiply)
+                acumulateOperation = "${leftHandSide}  x  ${rightHandSide}"
             }
             'D' -> {
                 val divide = OperationsHelper.division(leftHandSide, rightHandSide)
                 result_id.text = divide.toString()
                 digit_on_screen.append(divide)
+                acumulateOperation = "${leftHandSide}  /  ${rightHandSide}"
             }
             'P' -> {
                 val exponential = OperationsHelper.pow(leftHandSide, rightHandSide)
                 result_id.text = exponential.toString()
                 digit_on_screen.append(exponential)
+                acumulateOperation = "${leftHandSide}  ^  ${rightHandSide}"
             }
         }
     }
